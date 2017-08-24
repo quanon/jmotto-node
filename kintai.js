@@ -24,7 +24,12 @@ if (argv.kin && !argv.tai) {
 }
 
 (async() => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+    ]
+  });
   let page = await browser.newPage();
   let spinner;
 
