@@ -10,7 +10,7 @@
 
 ### or, if use Docker
 
-`docker build . -t jmotto-node`
+`docker build . -t jmotto`
 
 ## Usage
 
@@ -18,8 +18,14 @@
 
 * Click shusha button: `yarn run -s shusha`
 * Click taisha button: `yarn run -s taisha`
+* Show timecard
+  * current month: `yarn run -s timecard`
+  * specified month: `yarn run -s timecard -- --yyyymm 201701`
 
 ### or, if use Docker
 
-* Click shusha button: `docker run --rm -it jmotto-node shusha`
-* Click taisha button: `docker run --rm -it jmotto-node taisha`
+* Click shusha button: `docker run --rm -it jmotto shusha`
+* Click taisha button: `docker run --rm -it jmotto taisha`
+* Show timecard
+  * current month: `docker run --rm -it jmotto timecard`
+  * specified month: `docker run --rm -it jmotto timecard -- --yyyymm 201701`

@@ -5,7 +5,6 @@ const loginUrl = 'https://www1.j-motto.co.jp/fw/dfw/po80/portal/jsp/J10201.jsp?h
 
 export default async (page) => {
   await page.goto(loginUrl);
-  await page.screenshot({ path: 'example.png' });
   await page.focus('#memberID');
   await page.type(config['member_id']);
   await page.focus('#userID');
