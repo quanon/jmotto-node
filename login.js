@@ -4,7 +4,7 @@ const config = JSON.parse(fs.readFileSync('./config.json'));
 const loginUrl = 'https://www1.j-motto.co.jp/fw/dfw/po80/portal/jsp/J10201.jsp?https://www1.j-motto.co.jp/fw/dfw/gws/cgi-bin/aspioffice/iocjmtgw.cgi?cmd=login';
 
 export default async (page) => {
-  await page.goto(loginUrl);
+  await page.goto(loginUrl, { waitUntil: 'networkidle' });
   await page.focus('#memberID');
   await page.type(config['member_id']);
   await page.focus('#userID');

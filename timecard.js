@@ -33,7 +33,7 @@ if (argv.yyyymm) {
   spinner = ora('タイムカード取得中').start();
 
   const url = `https://gws45.j-motto.co.jp/cgi-bin/${config['member_id']}/ztcard.cgi?cmd=tcardindex#date=${yyyymm}01`;
-  await page.goto(url);
+  await page.goto(url, { waitUntil: 'networkidle' });
 
   const targetDateSelector = '.jtcard-fld-targetdate';
   await page.waitForFunction((selector) => {
