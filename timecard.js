@@ -34,14 +34,16 @@ if (argv.yyyymm) {
 
   const url = `https://gws45.j-motto.co.jp/cgi-bin/${config['member_id']}/ztcard.cgi?cmd=tcardindex#date=${yyyymm}01`;
   await page.goto(url);
-  await page.waitForFunction(() => {
-    return /\d+(?=月)/.test(document.querySelector('.jtcard-fld-targetdate').textContent)
-  });
 
-  const rows = await page.evaluate(() => {
+  const targetDateSelector = '.jtcard-fld-targetdate';
+  await page.waitForFunction((selector) => {
+    return /\d+(?=月)/.test(document.querySelector(selector).textContent);
+  }, {}, targetDateSelector);
+
+  const rows = await page.evaluate((selector) => {
     const month =
       /\d+(?=月)/
-        .exec(document.querySelector('.jtcard-fld-targetdate').textContent)[0];
+        .exec(document.querySelector(selector).textContent)[0];
 
     return Array.from(document.querySelectorAll('table.tcard-month tr'))
       .map((tr) => {
@@ -60,7 +62,7 @@ if (argv.yyyymm) {
         return [`${month}/${date}`, startTime, endTime, note];
       })
       .filter(tr => tr);
-  });
+  }, targetDateSelector);
 
   spinner.succeed();
   browser.close();
