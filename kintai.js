@@ -33,47 +33,60 @@ if (argv.kin && !argv.tai) {
   let page = await browser.newPage();
   let spinner;
 
-  spinner = ora('ログイン中').start();
-  await login(page);
-  spinner.succeed();
+  try {
+    spinner = ora('ログイン中').start();
 
-  const btnSelector = `.portal-timecard-${kintai.type} input.portal-timecard-btn`;
-  const btnVisible = () => {
-    return page.evaluate(`document.querySelector('${btnSelector}').offsetParent !== null`);
-  }
-
-  if (await btnVisible()) {
-    spinner = ora('打刻中').start();
-
-    while (true) {
-      await page.click(btnSelector);
-      if (await btnVisible() === false) break;
-      await sleep(50);
-    }
+    await login(page).catch((error) => {
+      spinner.fail(error.message);
+      throw error;
+    });
 
     spinner.succeed();
-  } else {
-    console.log(`※ ${kintai.label}時刻は打刻済みです。`);
-  }
 
-  const [startTime, endTime] = await Promise.all(
-    ['start', 'end'].map(async (type) => {
-      const timeSelector = `.portal-timecard-${type} .portal-timecard-time`;
-      const time = await page.evaluate(`document.querySelector('${timeSelector}').textContent`);
+    const btnSelector = `.portal-timecard-${kintai.type} input.portal-timecard-btn`;
+    const btnVisible = () => {
+      return page.evaluate((selector) => {
+        return document.querySelector(selector).offsetParent !== null;
+      }, btnSelector);
+    }
 
-      return time.replace(/-/g, '');
-    })
-  );
+    if (await btnVisible()) {
+      spinner = ora('打刻中').start();
 
-  if (startTime) console.log(`出社時刻は ${startTime} です。`);
+      while (true) {
+        await page.click(btnSelector);
+        if (await btnVisible() === false) break;
+        await sleep(50);
+      }
 
-  if (startTime && endTime) {
-    const diff = moment.utc(
-      moment.utc(endTime, 'HH:mm').diff(moment.utc(startTime, 'HH:mm'))
-    ).format('HH:mm');
+      spinner.succeed();
+    } else {
+      console.log(`※ ${kintai.label}時刻は打刻済みです。`);
+    }
 
-    console.log(`退社時刻は ${endTime} です。`);
-    console.log(`就業時間は ${diff} です。`);
+    const [startTime, endTime] = await Promise.all(
+      ['start', 'end'].map(async (type) => {
+        const timeSelector = `.portal-timecard-${type} .portal-timecard-time`;
+        const time = await page.evaluate((selector) => {
+          return document.querySelector(selector).textContent;
+        }, timeSelector);
+
+        return time.replace(/-/g, '');
+      })
+    );
+
+    if (startTime) console.log(`出社時刻は ${startTime} です。`);
+
+    if (startTime && endTime) {
+      const diff = moment.utc(
+        moment.utc(endTime, 'HH:mm').diff(moment.utc(startTime, 'HH:mm'))
+      ).format('HH:mm');
+
+      console.log(`退社時刻は ${endTime} です。`);
+      console.log(`就業時間は ${diff} です。`);
+    }
+  } catch (error) {
+    await page.screenshot({ path: 'error.png' })
   }
 
   browser.close();

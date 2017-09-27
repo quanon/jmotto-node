@@ -12,7 +12,8 @@ export default async (page) => {
   await page.focus('#password');
   await page.type(config['password']);
   await page.click('[name=NAME_DUMMY04]');
-  await page.waitForSelector('.portal-timecard');
+  await page.waitForSelector('.portal-timecard', { timeout: 10000 })
+    .catch(() => { throw new Error('ログインに失敗しました。')});
 
   return page;
 };
