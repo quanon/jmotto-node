@@ -86,7 +86,7 @@ if (argv.kin && !argv.tai) {
       console.log(`就業時間は ${diff} です。`);
     }
   } catch (error) {
-    await page.screenshot({ path: 'error.png' })
+    await page.screenshot({ path: 'error.png', fullPage: true });
   }
 
   browser.close();

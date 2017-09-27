@@ -106,7 +106,7 @@ if (argv.yyyymm) {
       );
     });
   } catch (error) {
-    await page.screenshot({ path: 'error.png' })
+    await page.screenshot({ path: 'error.png', fullPage: true });
     browser.close();
   }
 })();
