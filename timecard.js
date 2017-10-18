@@ -61,7 +61,9 @@ if (argv.yyyymm) {
           const date = row[0].replace('(', ' (');
           const startTime = row[1] === '未入力' ? '' : row[1];
           const endTime = row[4] === '未入力' ? '' : row[4];
+
           let note = row[5].replace(/^\[|\]$/g, '');
+          if (note.includes('遅刻')) note = '遅刻';
           if (note.includes('承認済み')) note = '修正';
           if (note.includes('午前休') || note.includes('午後休')) note = '半休';
 
