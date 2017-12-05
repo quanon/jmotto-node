@@ -4,6 +4,7 @@ import moment from 'moment';
 import ora from 'ora';
 import puppeteer from 'puppeteer';
 import login from './login';
+import padLeft from './pad_left';
 
 const config = JSON.parse(fs.readFileSync('./config.json'));
 const argv = minimist(process.argv.slice(2));
@@ -78,11 +79,11 @@ if (argv.yyyymm) {
     console.log();
     console.log(
       [
-        '日付'.padStart(8),
-        '出社'.padStart(8),
-        '退社'.padStart(8),
-        '就業時間'.padStart(6),
-        '備考'.padStart(8)
+        padLeft('日付', 10),
+        padLeft('出社', 10),
+        padLeft('退社', 10),
+        padLeft('就業時間', 10),
+        padLeft('備考', 10)
       ].join('')
     );
     console.log();
@@ -99,11 +100,11 @@ if (argv.yyyymm) {
 
       console.log(
         [
-          date.padStart(8),
-          startTime.padStart(10),
-          endTime.padStart(10),
-          diff.padStart(10),
-          note.padStart(8)
+          padLeft(date, 10),
+          padLeft(startTime, 10),
+          padLeft(endTime, 10),
+          padLeft(diff, 10),
+          padLeft(note, 10)
         ].join('')
       );
     });
