@@ -54,8 +54,11 @@ if (argv.kin && !argv.tai) {
       spinner = ora('打刻中').start();
 
       while (true) {
-        await page.click(btnSelector);
-        if (await btnVisible() === false) break;
+        if (await btnVisible()) {
+          await page.click(btnSelector);
+        } else {
+          break;
+        }
         await sleep(50);
       }
 

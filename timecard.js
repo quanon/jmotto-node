@@ -67,6 +67,8 @@ if (argv.yyyymm) {
           if (note.includes('遅刻')) note = '遅刻';
           if (note.includes('承認済み')) note = '修正';
           if (note.includes('午前休') || note.includes('午後休')) note = '半休';
+          if (note.includes('年末年始')) note = '年末年始';
+          if (note.includes('代休')) note = '代休';
 
           return [`${month}/${date}`, startTime, endTime, note];
         })
